@@ -204,8 +204,21 @@
 			if (err) {
 				throw err;
 			} else {
+				let options = {mimeType: 'video/webm;codecs=vp9,opus'};
+				  if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+				    alert(`${options.mimeType} is not supported`);
+				    options = {mimeType: 'video/webm;codecs=vp8,opus'};
+				    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+				      alert(`${options.mimeType} is not supported`);
+				      options = {mimeType: 'video/webm'};
+				      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+					alert(`${options.mimeType} is not supported`);
+					options = {mimeType: ''};
+				      }
+				    }
+				  }
 				// 通过 MediaRecorder 记录获取到的媒体流
-				mediaRecorder = new MediaRecorder(stream);
+				mediaRecorder = new MediaRecorder(stream, options);
 				mediaStream = stream;
 				var chunks = [], startTime = 0;
 				video.controls = false;
