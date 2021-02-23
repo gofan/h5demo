@@ -87,7 +87,7 @@
       }
       function nod() {
         var text = '请点头';
-        var count = 3;
+        var count = 5;
         mediaRecorder.start();
         nodTimer = window.setInterval(function() {
           tip.innerText = text + ' ' + count;
@@ -99,7 +99,6 @@
               nodVideo.src = null;
               nodVideo.srcObject = null;
               nodVideo.src = URL.createObjectURL(recorderFile);
-              nodVideo.controls = true;
               nodVideo.play();
               tip.innerText = '稍候请眨眼';
               window.setTimeout(function() {
@@ -115,7 +114,7 @@
       }
       function blink() {
         var text = '请眨眼';
-        var count = 3;
+        var count = 5;
         mediaRecorder.start();
         blinkTimer = window.setInterval(function() {
           tip.innerText = text + ' ' + count;
@@ -127,7 +126,6 @@
               blinkVideo.src = null;
               blinkVideo.srcObject = null;
               blinkVideo.src = URL.createObjectURL(recorderFile);
-              blinkVideo.controls = true;
               blinkVideo.play();
               finish();
             };
