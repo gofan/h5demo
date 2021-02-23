@@ -238,6 +238,7 @@
 
 				mediaRecorder.onstop = function (e) {
 					alert(mediaRecorder.mimeType);
+					alert(chunks.length);
 					// recorderFile = new Blob(chunks, { 'type' : mediaRecorder.mimeType });
 					recorderFile = new Blob(chunks, { 'type' : 'video/webm' });
 					chunks = [];
