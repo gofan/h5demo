@@ -99,6 +99,7 @@
               nodVideo.src = null;
               nodVideo.srcObject = null;
               nodVideo.src = URL.createObjectURL(recorderFile);
+	      nodVideo.controls = true;
               nodVideo.play();
               tip.innerText = '稍候请眨眼';
               window.setTimeout(function() {
@@ -126,6 +127,7 @@
               blinkVideo.src = null;
               blinkVideo.srcObject = null;
               blinkVideo.src = URL.createObjectURL(recorderFile);
+	      blinkVideo.controls = true;
               blinkVideo.play();
               finish();
             };
