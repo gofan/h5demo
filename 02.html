@@ -162,6 +162,8 @@
 				mediaRecorder.stop();
 				tip.innerText = '处理中，请稍候...';
 				stopRecordCallback = function () {
+					nodVideo.src = null;
+					nodVideo.srcObject = null;
 					nodVideo.src = URL.createObjectURL(recorderFile);
 					tip.innerText = '稍候请眨眼';
 					window.setTimeout(function () {
@@ -184,6 +186,8 @@
 				mediaRecorder.stop();
 				tip.innerText = '处理中，请稍候...';
 				stopRecordCallback = function () {
+					blinkVideo.src = null;
+					blinkVideo.srcObject = null;
 					blinkVideo.src = URL.createObjectURL(recorderFile);
 					finish();
 				};
