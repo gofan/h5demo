@@ -95,8 +95,6 @@
           if (count === 0) {
             window.clearInterval(nodTimer);
             nodTimer = null;
-            mediaRecorder.stop();
-            tip.innerText = '处理中，请稍候...';
             stopRecordCallback = function() {
               nodVideo.src = null;
               nodVideo.srcObject = null;
@@ -107,6 +105,8 @@
               },
               1000);
             };
+            mediaRecorder.stop();
+            tip.innerText = '处理中，请稍候...';
           }
         },
         1000);
@@ -121,14 +121,14 @@
           if (count === 0) {
             window.clearInterval(blinkTimer);
             blinkTimer = null;
-            mediaRecorder.stop();
-            tip.innerText = '处理中，请稍候...';
             stopRecordCallback = function() {
               blinkVideo.src = null;
               blinkVideo.srcObject = null;
               blinkVideo.src = URL.createObjectURL(recorderFile);
               finish();
             };
+            mediaRecorder.stop();
+            tip.innerText = '处理中，请稍候...';
           }
         },
         1000);
