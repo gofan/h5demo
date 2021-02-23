@@ -216,12 +216,15 @@
 				prepare();
 
 				mediaRecorder.ondataavailable = function(e) {
-					mediaRecorder.blobs.push(e.data);
-					chunks.push(e.data);
+					if (e.data && e.data.size > 0) {
+					    chunks.push(e.data);
+					    mediaRecorder.blobs.push(e.data);
+					}
 				};
 				mediaRecorder.blobs = [];
 
 				mediaRecorder.onstop = function (e) {
+					alert(mediaRecorder.mimeType);
 					// recorderFile = new Blob(chunks, { 'type' : mediaRecorder.mimeType });
 					recorderFile = new Blob(chunks, { 'type' : 'video/webm' });
 					chunks = [];
