@@ -223,17 +223,17 @@
           navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || window.getUserMedia;
           var constraints = {
             video: {
-              width: 1280,
-              height: 720
+              width: 640,
+              height: 480
             },
-            audio: audioEnable
+            audio: false
           };
           if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
               callback(false, stream);
-            })['catch'](function(err) {
+            }, function(err) {
               callback(err);
-            });
+	    });
           } else if (navigator.getUserMedia) {
             navigator.getUserMedia(constraints,
             function(stream) {
