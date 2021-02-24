@@ -170,6 +170,7 @@
     }
     function handleSuccess(stream) {
       console.log('getUserMedia() got stream:', stream);
+      log('stream: ', stream.active, stream.ended, stream.id);
       window.stream = stream;
 
       const gumVideo = document.querySelector('video#video');
@@ -230,11 +231,9 @@
           tip.innerText = '稍候请点头';
           window.setTimeout(function () {
             nod();
-          },
-            1000);
+          }, 500);
         }
-      },
-        1000);
+      }, 1000);
     }
     function nod() {
       var text = '请点头';
@@ -249,15 +248,14 @@
           tip.innerText = '稍候请眨眼';
           window.setTimeout(function () {
             blink();
-          }, 1000);
+          }, 500);
           mediaRecorder.onstop = function (e) {
             play(nodVideo, chunks);
             chunks = [];
           };
           mediaRecorder.stop();
         }
-      },
-        1000);
+      }, 1000);
     }
     function blink() {
       var text = '请眨眼';
