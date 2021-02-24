@@ -181,7 +181,7 @@
     }
     function handleSuccess(stream) {
       console.log('getUserMedia() got stream:', stream);
-      mediaStream = stream;
+      window.stream = stream;
 
       const gumVideo = document.querySelector('video#video');
       gumVideo.srcObject = stream;
