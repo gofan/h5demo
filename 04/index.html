@@ -48,7 +48,7 @@
 
   ul.clip li {
     display: block;
-    width: 100%;
+    width: 50%;
     float: left;
     padding: 2px;
   }
@@ -207,7 +207,7 @@
     function prepare() {
       // reset
       // nodVideo.src = null;
-      blinkVideo.src = null;
+      // blinkVideo.src = null;
       if (prepareTimer) {
         window.clearInterval(prepareTimer);
         prepareTimer = null;
@@ -250,13 +250,13 @@
           nodTimer = null;
           tip.innerText = '稍候请眨眼';
           window.setTimeout(function () {
-            // blink();
+            blink();
           }, 1000);
-          mediaRecorder.stop();
           mediaRecorder.onstop = function (e) {
             play(nodVideo, chunks);
             chunks = [];
           };
+          mediaRecorder.stop();
         }
       },
         1000);
@@ -271,16 +271,12 @@
         if (count === 0) {
           window.clearInterval(blinkTimer);
           blinkTimer = null;
-          stopRecordCallback = function (cks) {
-            const superBuffer = new Blob(cks, {type: 'video/webm'});
-            blinkVideo.src = null;
-            blinkVideo.srcObject = null;
-            blinkVideo.src = window.URL.createObjectURL(superBuffer);
-            blinkVideo.controls = true;
-            blinkVideo.play();
-            finish();
-          };
           mediaRecorder.stop();
+          mediaRecorder.onstop = function (e) {
+            play(blinkVideo, chunks);
+            finish();
+            chunks = [];
+          };
           tip.innerText = '处理中，请稍候...';
         }
       },
