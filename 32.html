@@ -92,6 +92,7 @@
     <div class="circle"></div>
     <video id="video"></video>
   </div>
+  <video id="recorded" playsinline loop></video>
   <ul class="clip">
     <li>
       <span>点头视频</span>
@@ -132,12 +133,13 @@
     }
 
     function play() {
+      const recordedVideo = document.querySelector('video#recorded');
       const superBuffer = new Blob(chunks, {type: 'video/webm'});
-      nodVideo.src = null;
-      nodVideo.srcObject = null;
-      nodVideo.src = window.URL.createObjectURL(superBuffer);
-      nodVideo.controls = true;
-      nodVideo.play();
+      recordedVideo.src = null;
+      recordedVideo.srcObject = null;
+      recordedVideo.src = window.URL.createObjectURL(superBuffer);
+      recordedVideo.controls = true;
+      recordedVideo.play();
     }
   
     function initRecord() {
