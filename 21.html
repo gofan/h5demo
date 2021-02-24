@@ -29,8 +29,16 @@
       </li>
     </ul>
     <div class="actions">
-      <button id="retry">重试</button></div>
+      <button id="retry">重试</button>
+    </div>
+    <h3>Logs</h3>
+    <div id="log"></div>
     <script>var mediaRecorder;
+      const logDiv = document.querySelector('div#log');
+
+      function log(...str) {
+        logDiv.innerHtml = logDiv.innerHtml + '<br/>' + str.join(' ');
+      }
       var mediaStream;
       var recorderFile;
       var stopRecordCallback;
@@ -138,7 +146,7 @@
         1000);
       }
       function finish() {
-        console.log('finished');
+        log('finished');
         tip.innerText = '已完成';
       }
       // end
@@ -146,32 +154,24 @@
         MediaUtils.getUserMedia(true, false,
         function(err, stream) {
           if (err) {
+            log(err);
             throw err;
           } else {
             let options = {
               mimeType: 'video/webm;codecs=vp9,opus'
             };
             if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-              alert(`$ {
-                options.mimeType
-              }
-              is not supported`);
+              alert(`${options.mimeType} is not supported`);
               options = {
                 mimeType: 'video/webm;codecs=vp8,opus'
               };
               if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                alert(`$ {
-                  options.mimeType
-                }
-                is not supported`);
+                alert(`${options.mimeType} is not supported`);
                 options = {
                   mimeType: 'video/webm'
                 };
                 if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                  alert(`$ {
-                    options.mimeType
-                  }
-                  is not supported`);
+                  alert(`${options.mimeType} is not supported`);
                   options = {
                     mimeType: ''
                   };
@@ -181,28 +181,25 @@
             // 通过 MediaRecorder 记录获取到的媒体流
             mediaRecorder = new MediaRecorder(stream, options);
             mediaStream = stream;
-            var chunks = [],
-            startTime = 0;
+            var chunks = [], startTime = 0;
             video.controls = false;
             video.muted = true;
             video.srcObject = stream;
-            console.log('stream', stream);
+            log('stream: ', stream);
             video.play();
             prepare();
 
+            mediaRecorder.blobs = [];
             mediaRecorder.ondataavailable = function(e) {
               if (e.data && e.data.size > 0) {
                 chunks.push(e.data);
-                // mediaRecorder.blobs.push(e.data);
+                mediaRecorder.blobs.push(e.data);
               }
             };
-            mediaRecorder.blobs = [];
 
             mediaRecorder.onstop = function(e) {
               // recorderFile = new Blob(chunks, { 'type' : mediaRecorder.mimeType });
-              recorderFile = new Blob(chunks, {
-                'type': 'video/webm'
-              });
+              recorderFile = new Blob(chunks, { type: 'video/webm' });
               chunks = [];
               if (null != stopRecordCallback) {
                 stopRecordCallback();
@@ -214,17 +211,15 @@
 
       var MediaUtils = {
         /**
-	  * 获取用户媒体设备(处理兼容的问题)
-	  * @param videoEnable {boolean} - 是否启用摄像头
-	  * @param audioEnable {boolean} - 是否启用麦克风
-	  * @param callback {Function} - 处理回调
-	  */
+	        * 获取用户媒体设备(处理兼容的问题)
+	        * @param videoEnable {boolean} - 是否启用摄像头
+	        * @param audioEnable {boolean} - 是否启用麦克风
+	        * @param callback {Function} - 处理回调
+	        */
         getUserMedia: function(videoEnable, audioEnable, callback) {
           navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || window.getUserMedia;
           var constraints = {
-            video: {
-              width: document.documentElement.offsetWidth,
-            },
+            video: true,
             audio: false
           };
           if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -247,9 +242,9 @@
         },
 
         /**
-		* 关闭媒体流
-		* @param stream {MediaStream} - 需要关闭的流
-		*/
+		      * 关闭媒体流
+		      * @param stream {MediaStream} - 需要关闭的流
+		      */
         closeStream: function(stream) {
           if (typeof stream.stop === 'function') {
             stream.stop();
