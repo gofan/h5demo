@@ -95,11 +95,11 @@
   <ul class="clip">
     <li>
       <span>点头视频</span>
-      <video id="nod-video" playsinline loop width="100%"></video>
+      <video id="nod-video" playsinline loop width="300px"></video>
     </li>
     <li>
       <span>眨眼视频</span>
-      <video id="blink-video" playsinline loop width="100%"></video>
+      <video id="blink-video" playsinline loop width="300px"></video>
     </li>
   </ul>
   <div class="actions">
@@ -166,7 +166,13 @@
       console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
       
       mediaRecorder.ondataavailable = handleDataAvailable;
-      prepare();
+      mediaRecorder.start();
+      setTimeout(() => {
+        mediaRecorder.stop();
+        mediaRecorder.onstop = function () {
+          play(nodVideo, chunks);
+        };
+      }, 5000);
     }
     function handleSuccess(stream) {
       console.log('getUserMedia() got stream:', stream);
