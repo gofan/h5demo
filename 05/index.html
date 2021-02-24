@@ -71,7 +71,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: radial-gradient(50% 50%, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, .6) 0);
+    background: radial-gradient(50% 50%, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, .8) 0);
     width: 100%;
     height: 100%;
   }
@@ -95,11 +95,11 @@
   <ul class="clip">
     <li>
       <span>点头视频</span>
-      <video id="nod-video" playsinline loop width="300px"></video>
+      <video id="nod-video" playsinline loop width="100%"></video>
     </li>
     <li>
       <span>眨眼视频</span>
-      <video id="blink-video" playsinline loop width="300px"></video>
+      <video id="blink-video" playsinline loop width="100%"></video>
     </li>
   </ul>
   <div class="actions">
@@ -183,7 +183,7 @@
           echoCancellation: { exact: false }
         },
         video: {
-          width: 300, height: 240
+          width: 600, height: 480
         }
       };
       try {
