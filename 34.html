@@ -147,7 +147,7 @@
         mediaRecorder = new MediaRecorder(window.stream, options);
       } catch (e) {
         console.error('Exception while creating MediaRecorder:', e);
-        logDiv.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
+        log(`Exception while creating MediaRecorder: ${JSON.stringify(e)}`);
         return;
       }
 
@@ -181,7 +181,7 @@
         handleSuccess(stream);
       } catch (e) {
         log('navigator.getUserMedia error:', e);
-        errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+        logDiv.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
       }
     }
     // start
