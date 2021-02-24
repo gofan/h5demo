@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<head>
+  <title>user verify</title>
+  <script src="fileSaver.js"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+</head>
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #EFEDEF;
+  }
+
+  #tip {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
+    margin-top: 10px;
+    display: block;
+    background: white;
+    text-align: center;
+  }
+
+  #video {
+    z-index: 9;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  ul.clip {
+    list-style: none;
+    margin-top: 5px;
+    text-align: center;
+    float: left;
+    width: 100%;
+  }
+
+  ul.clip li {
+    display: block;
+    width: 50%;
+    float: left;
+    padding: 2px;
+  }
+
+  ul.clip li span {
+    border: 1px solid #fff;
+    display: inline-block;
+    width: 100%;
+    padding: 5px 0;
+  }
+
+  #main {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .circle {
+    z-index: 99;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: radial-gradient(50% 50%, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, .6) 0);
+    width: 100%;
+    height: 100%;
+  }
+
+  .actions {
+    text-align: center;
+    width: 100%;
+  }
+
+  .actions button {
+    padding: 5px 10px;
+  }
+</style>
+
+<body>
+  <div id="tip">...</div>
+  <div id="main">
+    <div class="circle"></div>
+    <video id="video"></video>
+  </div>
+  <ul class="clip">
+    <li>
+      <span>点头视频</span>
+      <video id="nod-video" playsinline loop width="100%"></video>
+    </li>
+    <li>
+      <span>眨眼视频</span>
+      <video id="blink-video" playsinline loop width="100%"></video>
+    </li>
+  </ul>
+  <div class="actions">
+    <button id="retry">重试</button>
+  </div>
+  <h3>Logs</h3>
+  <div id="log"></div>
+  <script>var mediaRecorder;
+    const logDiv = document.querySelector('div#log');
+
+    function log(...str) {
+      logDiv.innerHtml = logDiv.innerHtml + '<br/>' + str.join(' ');
+    }
+    var mediaStream;
+    var recorderFile;
+    var stopRecordCallback;
+    var tip = document.getElementById("tip");
+    var video = document.getElementById('video');
+    var nodVideo = document.querySelector('video#nod-video');
+    var blinkVideo = document.getElementById('blink-video');
+    var main = document.getElementById('main');
+    var retry = document.getElementById('retry');
+    var prepareTimer, nodTimer, blinkTimer;
+    // start
+    window.onload = function () {
+      tip.innerText = '请允许使用您的摄像头';
+      main.style.height = document.documentElement.offsetWidth + 'px';
+      openCamera();
+    }
+    retry.onclick = function () {
+      prepare();
+    }
+    function prepare() {
+      // reset
+      stopRecordCallback = null;
+      nodVideo.src = null;
+      blinkVideo.src = null;
+      if (prepareTimer) {
+        window.clearInterval(prepareTimer);
+        prepareTimer = null;
+      }
+      if (nodTimer) {
+        window.clearInterval(nodTimer);
+        nodTimer = null;
+      }
+      if (blinkTimer) {
+        window.clearInterval(blinkTimer);
+        blinkTimer = null;
+      }
+      var text = '请对准摄像头';
+      var count = 3;
+      tip.innerText = text;
+      prepareTimer = window.setInterval(function () {
+        tip.innerText = text + ' ' + count;
+        count--;
+        if (count === 0) {
+          window.clearInterval(prepareTimer);
+          prepareTimer = null;
+          tip.innerText = '稍候请点头';
+          window.setTimeout(function () {
+            nod();
+          },
+            1000);
+        }
+      },
+        1000);
+    }
+    function nod() {
+      var text = '请点头';
+      var count = 5;
+      mediaRecorder.start();
+      nodTimer = window.setInterval(function () {
+        tip.innerText = text + ' ' + count;
+        count--;
+        if (count === 0) {
+          window.clearInterval(nodTimer);
+          nodTimer = null;
+          stopRecordCallback = function (cks) {
+            const superBuffer = new Blob(cks, {type: 'video/webm'});
+            nodVideo.src = null;
+            nodVideo.srcObject = null;
+            nodVideo.src = window.URL.createObjectURL(superBuffer);
+            nodVideo.controls = true;
+            nodVideo.play();
+            tip.innerText = '稍候请眨眼';
+            window.setTimeout(function () {
+              // blink();
+            },
+              1000);
+          };
+          mediaRecorder.stop();
+          tip.innerText = '处理中，请稍候...';
+        }
+      },
+        1000);
+    }
+    function blink() {
+      var text = '请眨眼';
+      var count = 5;
+      mediaRecorder.start();
+      blinkTimer = window.setInterval(function () {
+        tip.innerText = text + ' ' + count;
+        count--;
+        if (count === 0) {
+          window.clearInterval(blinkTimer);
+          blinkTimer = null;
+          stopRecordCallback = function (cks) {
+            const superBuffer = new Blob(cks, {type: 'video/webm'});
+            blinkVideo.src = null;
+            blinkVideo.srcObject = null;
+            blinkVideo.src = window.URL.createObjectURL(superBuffer);
+            blinkVideo.controls = true;
+            blinkVideo.play();
+            finish();
+          };
+          mediaRecorder.stop();
+          tip.innerText = '处理中，请稍候...';
+        }
+      },
+        1000);
+    }
+    function finish() {
+      log('finished');
+      tip.innerText = '已完成';
+    }
+    // end
+    function openCamera() {
+      MediaUtils.getUserMedia(true, false,
+        function (err, stream) {
+          if (err) {
+            log(err);
+            throw err;
+          } else {
+            let options = {
+              mimeType: 'video/webm;codecs=vp9,opus'
+            };
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+              alert(`${options.mimeType} is not supported`);
+              options = {
+                mimeType: 'video/webm;codecs=vp8,opus'
+              };
+              if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                alert(`${options.mimeType} is not supported`);
+                options = {
+                  mimeType: 'video/webm'
+                };
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                  alert(`${options.mimeType} is not supported`);
+                  options = {
+                    mimeType: ''
+                  };
+                }
+              }
+            }
+            // 通过 MediaRecorder 记录获取到的媒体流
+            mediaRecorder = new MediaRecorder(stream, options);
+            mediaStream = stream;
+            var chunks = [], startTime = 0;
+            video.controls = false;
+            video.muted = true;
+            video.srcObject = stream;
+            log('stream: ', stream);
+            video.play();
+            prepare();
+
+            mediaRecorder.blobs = [];
+            mediaRecorder.ondataavailable = function (e) {
+              if (e.data && e.data.size > 0) {
+                chunks.push(e.data);
+                mediaRecorder.blobs.push(e.data);
+              }
+            };
+
+            mediaRecorder.onstop = function (e) {
+              if (null != stopRecordCallback) {
+                stopRecordCallback(chunks);
+              }
+              chunks = [];
+            };
+          }
+        });
+    }
+
+    var MediaUtils = {
+      /**
+        * 获取用户媒体设备(处理兼容的问题)
+        * @param videoEnable {boolean} - 是否启用摄像头
+        * @param audioEnable {boolean} - 是否启用麦克风
+        * @param callback {Function} - 处理回调
+        */
+      getUserMedia: function (videoEnable, audioEnable, callback) {
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || window.getUserMedia;
+        var constraints = {
+          video: true,
+          audio: false
+        };
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+            callback(false, stream);
+          }, function (err) {
+            callback(err);
+          });
+        } else if (navigator.getUserMedia) {
+          navigator.getUserMedia(constraints,
+            function (stream) {
+              callback(false, stream);
+            },
+            function (err) {
+              callback(err);
+            });
+        } else {
+          callback(new Error('Not support userMedia'));
+        }
+      },
+
+      /**
+        * 关闭媒体流
+        * @param stream {MediaStream} - 需要关闭的流
+        */
+      closeStream: function (stream) {
+        if (typeof stream.stop === 'function') {
+          stream.stop();
+        } else {
+          let trackList = [stream.getAudioTracks(), stream.getVideoTracks()];
+
+          for (let i = 0; i < trackList.length; i++) {
+            let tracks = trackList[i];
+            if (tracks && tracks.length > 0) {
+              for (let j = 0; j < tracks.length; j++) {
+                let track = tracks[j];
+                if (typeof track.stop === 'function') {
+                  track.stop();
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+
+    function saver() {
+      var file = new File([recorderFile], 'msr-' + (new Date).toISOString().replace(/:|\./g, '-') + '.mp4', {
+        type: 'video/mp4'
+      });
+      saveAs(file);
+    }
+
+    function send() {
+      var file = new File([recorderFile], 'msr-' + (new Date).toISOString().replace(/:|\./g, '-') + '.mp4', {
+        type: 'video/mp4'
+      });
+      var data = new FormData();
+      data.append("username", "test");
+      data.append("userfile", file);
+
+      var req = new XMLHttpRequest();
+      req.open("POST", "com.spinsoft.bip.frame.utils.image.saveMp4.biz.ext");
+      req.send(data);
+    }</script>
+</body>
+
+</html>
