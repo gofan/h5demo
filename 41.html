@@ -132,13 +132,13 @@
       }
     }
 
-    function play() {
-      const superBuffer = new Blob(chunks, {type: 'video/webm'});
-      nodVideo.src = null;
-      nodVideo.srcObject = null;
-      nodVideo.src = window.URL.createObjectURL(superBuffer);
-      nodVideo.controls = true;
-      nodVideo.play();
+    function play(ele, cks) {
+      const superBuffer = new Blob(cks, {type: 'video/webm'});
+      ele.src = null;
+      ele.srcObject = null;
+      ele.src = window.URL.createObjectURL(superBuffer);
+      ele.controls = true;
+      ele.play();
     }
   
     function initRecord() {
@@ -172,11 +172,7 @@
       };
       
       mediaRecorder.ondataavailable = handleDataAvailable;
-      mediaRecorder.start();
-      console.log('MediaRecorder started', mediaRecorder);
-      setTimeout(() => {
-        mediaRecorder.stop();
-      }, 5000);
+      prepare();
     }
     function handleSuccess(stream) {
       console.log('getUserMedia() got stream:', stream);
@@ -190,10 +186,10 @@
     async function init() {
       const constraints = {
         audio: {
-          echoCancellation: {exact: false}
+          echoCancellation: { exact: false }
         },
         video: {
-          width: 1280, height: 720
+          width: 300, height: 240
         }
       };
       try {
@@ -259,20 +255,12 @@
         if (count === 0) {
           window.clearInterval(nodTimer);
           nodTimer = null;
-          stopRecordCallback = function (cks) {
-            const superBuffer = new Blob(cks, {type: 'video/webm'});
-            nodVideo.src = null;
-            nodVideo.srcObject = null;
-            nodVideo.src = window.URL.createObjectURL(superBuffer);
-            nodVideo.controls = true;
-            nodVideo.play();
-            tip.innerText = '稍候请眨眼';
-            window.setTimeout(function () {
-              // blink();
-            },
-              1000);
-          };
+          tip.innerText = '稍候请眨眼';
+          window.setTimeout(function () {
+            // blink();
+          }, 1000);
           mediaRecorder.stop();
+          play(nodVideo, chunks);
           tip.innerText = '处理中，请稍候...';
         }
       },
