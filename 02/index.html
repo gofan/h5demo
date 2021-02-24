@@ -166,13 +166,15 @@
       console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
       
       mediaRecorder.ondataavailable = handleDataAvailable;
-      mediaRecorder.start();
+      setTimeout(() => {
+        mediaRecorder.start();
+      }, 2000);
       setTimeout(() => {
         mediaRecorder.stop();
         mediaRecorder.onstop = function () {
           play(nodVideo, chunks);
         };
-      }, 5000);
+      }, 8000);
     }
     function handleSuccess(stream) {
       console.log('getUserMedia() got stream:', stream);
