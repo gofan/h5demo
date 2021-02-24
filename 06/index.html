@@ -179,9 +179,7 @@
 
     async function init() {
       const constraints = {
-        audio: {
-          echoCancellation: { exact: false }
-        },
+        audio: false,
         video: {
           width: 600, height: 480
         }
@@ -240,7 +238,7 @@
     }
     function nod() {
       var text = '请点头';
-      var count = 5;
+      var count = 3;
       mediaRecorder.start();
       nodTimer = window.setInterval(function () {
         tip.innerText = text + ' ' + count;
@@ -263,7 +261,7 @@
     }
     function blink() {
       var text = '请眨眼';
-      var count = 5;
+      var count = 3;
       mediaRecorder.start();
       blinkTimer = window.setInterval(function () {
         tip.innerText = text + ' ' + count;
