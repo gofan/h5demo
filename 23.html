@@ -50,10 +50,26 @@
       var retry = document.getElementById('retry');
       var prepareTimer, nodTimer, blinkTimer;
       // start
+      async function init(constraints) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          handleSuccess(stream);
+        } catch (e) {
+          log('navigator.getUserMedia error:', e);
+          errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+        }
+      }
+      function handleSuccess(stream) {
+        console.log('getUserMedia() got stream:', stream);
+        window.stream = stream;
+
+        video.srcObject = stream;
+      }
+      
       window.onload = function() {
         tip.innerText = '请允许使用您的摄像头';
         main.style.height = document.documentElement.offsetWidth + 'px';
-        openCamera();
+        // openCamera();
       }
       retry.onclick = function() {
         prepare();
