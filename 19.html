@@ -223,8 +223,7 @@
           navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || window.getUserMedia;
           var constraints = {
             video: {
-              width: 300,
-              height: 240
+              width: document.documentElement.offsetWidth,
             },
             audio: false
           };
