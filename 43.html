@@ -48,7 +48,7 @@
 
   ul.clip li {
     display: block;
-    width: 50%;
+    width: 100%;
     float: left;
     padding: 2px;
   }
@@ -164,12 +164,6 @@
       }
 
       console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
-
-      mediaRecorder.onstop = (event) => {
-        console.log('Recorder stopped: ', event);
-        console.log('Recorded Blobs: ', chunks);
-        play();
-      };
       
       mediaRecorder.ondataavailable = handleDataAvailable;
       prepare();
@@ -260,9 +254,10 @@
             // blink();
           }, 1000);
           mediaRecorder.stop();
-          setTimeout(() => {
+          mediaRecorder.onstop = function (e) {
             play(nodVideo, chunks);
-          }, 1000);
+            chunks = [];
+          };
         }
       },
         1000);
