@@ -44,7 +44,7 @@
       var stopRecordCallback;
       var tip = document.getElementById("tip");
       var video = document.getElementById('video');
-      var nodVideo = document.getElementById('nod-video');
+      var nodVideo = document.querySelector('video#nod-video');
       var blinkVideo = document.getElementById('blink-video');
       var main = document.getElementById('main');
       var retry = document.getElementById('retry');
@@ -107,12 +107,11 @@
               nodVideo.src = null;
               nodVideo.srcObject = null;
               nodVideo.src = URL.createObjectURL(recorderFile);
-		    alert(nodVideo.src);
 	      nodVideo.controls = true;
               nodVideo.play();
               tip.innerText = '稍候请眨眼';
               window.setTimeout(function() {
-                blink();
+                // blink();
               },
               1000);
             };
@@ -205,7 +204,7 @@
               if (null != stopRecordCallback) {
                 window.setTimeout(function () {
 		  stopRecordCallback();
-		}, 2000);
+		}, 1000);
               }
             };
           }
