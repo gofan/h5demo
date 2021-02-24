@@ -111,7 +111,12 @@
     const logDiv = document.querySelector('div#log');
 
     function log(...str) {
-      logDiv.innerHTML = logDiv.innerHTML + '<br/>' + str.join(' ');
+      logDiv.innerHTML = logDiv.innerHTML + '<br/>' + str.map(item => {
+        if (typeof item === 'object') {
+          return JSON.stringify(item);
+        }
+        return item;
+      }).join(' ');
     }
     var mediaStream;
     var recorderFile;
@@ -126,7 +131,7 @@
     var chunks = [];
     // new
     function handleDataAvailable(event) {
-      console.log('handleDataAvailable', event);
+      log('handleDataAvailable', event);
       if (event.data && event.data.size > 0) {
         chunks.push(event.data);
       }
@@ -163,13 +168,13 @@
         return;
       }
 
-      console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
+      log('Created MediaRecorder', mediaRecorder, 'with options', options);
       
       mediaRecorder.ondataavailable = handleDataAvailable;
       prepare();
     }
     function handleSuccess(stream) {
-      console.log('getUserMedia() got stream:', stream);
+      log('getUserMedia() got stream:', stream);
       log('stream: ', stream.active, stream.ended, stream.id);
       window.stream = stream;
 
