@@ -111,7 +111,7 @@
     const logDiv = document.querySelector('div#log');
 
     function log(...str) {
-      logDiv.innerHtml = logDiv.innerHtml + '<br/>' + str.join(' ');
+      logDiv.innerHTML = logDiv.innerHTML + '<br/>' + str.join(' ');
     }
     var mediaStream;
     var recorderFile;
