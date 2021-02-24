@@ -260,8 +260,9 @@
             // blink();
           }, 1000);
           mediaRecorder.stop();
-          play(nodVideo, chunks);
-          tip.innerText = '处理中，请稍候...';
+          setTimeout(() => {
+            play(nodVideo, chunks);
+          }, 1000);
         }
       },
         1000);
