@@ -124,6 +124,7 @@
     var main = document.getElementById('main');
     var retry = document.getElementById('retry');
     var prepareTimer, nodTimer, blinkTimer;
+    var chunks = [];
     // new
     function handleDataAvailable(event) {
       console.log('handleDataAvailable', event);
@@ -340,7 +341,6 @@
             // 通过 MediaRecorder 记录获取到的媒体流
             mediaRecorder = new MediaRecorder(stream, options);
             mediaStream = stream;
-            var chunks = [], startTime = 0;
             video.controls = false;
             video.muted = true;
             video.srcObject = stream;
