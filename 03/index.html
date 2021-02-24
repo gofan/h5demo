@@ -166,15 +166,7 @@
       console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
       
       mediaRecorder.ondataavailable = handleDataAvailable;
-      setTimeout(() => {
-        mediaRecorder.start();
-      }, 2000);
-      setTimeout(() => {
-        mediaRecorder.stop();
-        mediaRecorder.onstop = function () {
-          play(nodVideo, chunks);
-        };
-      }, 8000);
+      prepare();
     }
     function handleSuccess(stream) {
       console.log('getUserMedia() got stream:', stream);
@@ -214,8 +206,7 @@
     }
     function prepare() {
       // reset
-      stopRecordCallback = null;
-      nodVideo.src = null;
+      // nodVideo.src = null;
       blinkVideo.src = null;
       if (prepareTimer) {
         window.clearInterval(prepareTimer);
