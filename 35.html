@@ -175,7 +175,15 @@
       initRecord();
     }
 
-    async function init(constraints) {
+    async function init() {
+      const constraints = {
+        audio: {
+          echoCancellation: {exact: false}
+        },
+        video: {
+          width: 1280, height: 720
+        }
+      };
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         handleSuccess(stream);
