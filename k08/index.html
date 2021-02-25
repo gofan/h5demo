@@ -6,7 +6,6 @@
     <title>h5 video</title>
 </head>
 <body>
-    <video loop autoplay controls width="100%" src="./demo.mp4"></video>
     <div id="select-wrap">
         拍摄视频
         <input id="select" type="file" accept="video/*" capture="camrecorder" />
@@ -76,7 +75,7 @@
                     log('event: ', ev, event);
                 })
             });
-            video.onloadedmetadata = function () {
+            function loaded () {
                 preview.appendChild(video);
                 video.play();
                 const size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
@@ -87,11 +86,18 @@
                 preview.appendChild(
                     document.createTextNode(text)
                 );
+            }
+            video.onloadedmetadata = function () {
+                return;
+                loaded();
             };
             video.onerror = function (e) {
                 log('onerror: ', e)
             }
             video.src = src;
+            window.setTimeout(function () {
+                loaded();
+            }, 2000);
         });
     };
 </script>
