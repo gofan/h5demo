@@ -107,15 +107,12 @@
             video.src = src;
             preview.appendChild(video);
             window.setTimeout(function () {
-                // video.play();
-                wx.ready(() => {
+                video.play();
+                var play = function() {
+                    document.removeEventListener("WeixinJSBridgeReady", play);
                     video.play();
-                });
-                // var play = function() {
-                //     document.removeEventListener("WeixinJSBridgeReady", play);
-                //     video.play();
-                // };
-                // document.addEventListener("WeixinJSBridgeReady", play, false);
+                };
+                document.addEventListener("WeixinJSBridgeReady", play, false);
             }, 1000);
         });
     };
