@@ -72,7 +72,6 @@
             video.loop = true;
             video.playsinline = true;
             video.muted = true;
-            video.autoplay = true;
             evs.forEach(function (ev) {
                 video.addEventListener(ev, function (event) {
                     log('event: ', ev, event);
@@ -97,7 +96,7 @@
             video.src = src;
             preview.appendChild(video);
             window.setTimeout(function () {
-                // video.play();
+                video.play();
             }, 1000);
         });
     };
