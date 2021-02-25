@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>h5 video</title>
+</head>
+<body>
+    <input id="select" type="file" accept="video/*" capture="camrecorder" />
+    <h3>预览：</h3>
+    <div id="preview"></div>
+</body>
+<style>
+    #preview video {
+        margin-top: 10px;
+        display: block;
+        height: 200px;
+    }
+</style>
+<script>
+    var preview = document.querySelector('div#preview');
+    var select = document.querySelector('div#select');
+    select.onchange = (e) => {
+        console.log('file change: ', e);
+        const target = e.target || e.srcElement;
+        [...target.files].forEach((file) => {
+            const src = window.URL.createObjectURL(file);
+            const video = document.createElement('video');
+            video.onloadedmetadata = () => {
+                preview.appendChild(video);
+                const size = (file.size / 1024 / 1024).toFixed(2) + ' KB';
+                const duration = video.duration + ' s';
+                const type = file.type;
+                const text = `Size: ${size}, Duration: ${duration}, Type: ${type}`;
+                preview.appendChild(
+                    document.createTextNode(text)
+                );
+            };
+            video.src = src;
+        });
+    };
+</script>
+</html>
