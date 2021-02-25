@@ -78,7 +78,7 @@
                 })
             });
             function loaded () {
-                preview.appendChild(video);
+                video.play();
                 const size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
                 const duration = video.duration + ' 秒';
                 const type = file.type;
@@ -96,10 +96,10 @@
                 log('onerror: ', e)
             }
             video.src = src;
-            video.play();
+            preview.appendChild(video);
             window.setTimeout(function () {
                 // loaded();
-            }, 5000);
+            }, 1000);
         });
     };
 </script>
