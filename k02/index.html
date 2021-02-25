@@ -14,7 +14,7 @@
     #preview video {
         margin-top: 10px;
         display: block;
-        height: 200px;
+        width: 100%;
     }
 </style>
 <script>
@@ -26,8 +26,11 @@
         [...target.files].forEach((file) => {
             const src = window.URL.createObjectURL(file);
             const video = document.createElement('video');
+            video.controls = true;
+            video.loop = true;
             video.onloadedmetadata = () => {
                 preview.appendChild(video);
+                video.play();
                 const size = (file.size / 1024 / 1024).toFixed(2) + ' KB';
                 const duration = video.duration + ' s';
                 const type = file.type;
