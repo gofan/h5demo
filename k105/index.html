@@ -81,14 +81,14 @@
             video.loop = true;
             video.playsinline = true;
             video.muted = true;
-            // video.autoplay = true;
+            video.autoplay = true;
             evs.forEach(function (ev) {
                 video.addEventListener(ev, function (event) {
                     log('event: ', ev, event);
                 })
             });
             function loaded () {
-                video.play();
+                // video.play();
                 const size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
                 const duration = video.duration + ' 秒';
                 const type = file.type;
@@ -108,12 +108,7 @@
             preview.appendChild(video);
             window.setTimeout(function () {
                 video.play();
-                var play = function() {
-                    document.removeEventListener("WeixinJSBridgeReady", play);
-                    video.play();
-                };
-                document.addEventListener("WeixinJSBridgeReady", play, false);
-            }, 1000);
+            }, 5000);
         });
     };
 </script>
