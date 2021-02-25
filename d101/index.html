@@ -73,6 +73,7 @@
             video.playsinline = true;
             video.muted = true;
             video.autoplay = true;
+            video.preload = 'auto';
             evs.forEach(function (ev) {
                 video.addEventListener(ev, function (event) {
                     log('event: ', ev, event);
