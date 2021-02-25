@@ -6,20 +6,45 @@
     <title>h5 video</title>
 </head>
 <body>
-    <input id="select" type="file" accept="video/*" capture="camrecorder" />
+    <div id="select-wrap">
+        拍摄视频
+        <input id="select" type="file" accept="video/*" capture="camrecorder" />
+    </div>
     <h3>预览：</h3>
     <div id="preview"></div>
 </body>
 <style>
+    #select-wrap {
+        width: 100px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        padding: 5 10px;
+        background-color:firebrick;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    #select-wrap:hover {
+        background-color: forestgreen;
+    }
+    #select-wrap input {
+        display: none;
+    }
     #preview video {
-        margin-top: 10px;
         display: block;
         width: 100%;
+        margin-top: 10px;
     }
 </style>
 <script>
     var preview = document.querySelector('div#preview');
     var select = document.querySelector('input#select');
+    var selectWrap = document.querySelector('div#select-wrap');
+    selectWrap.onclick = () => {
+        select.click();
+    }
     select.onchange = (e) => {
         console.log('file change: ', e);
         const target = e.target || e.srcElement;
@@ -31,10 +56,10 @@
             video.onloadedmetadata = () => {
                 preview.appendChild(video);
                 video.play();
-                const size = (file.size / 1024 / 1024).toFixed(2) + ' KB';
-                const duration = video.duration + ' s';
+                const size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+                const duration = video.duration + ' 秒';
                 const type = file.type;
-                const text = `Size: ${size}, Duration: ${duration}, Type: ${type}`;
+                const text = `大小：${size} 时长:${duration} 类型：${type}`;
                 preview.appendChild(
                     document.createTextNode(text)
                 );
