@@ -176,18 +176,19 @@
 
       let options = {mimeType: 'video/webm;codecs=vp9,opus'};
       if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        console.error(`${options.mimeType} is not supported`);
+        log(`${options.mimeType} is not supported`);
         options = {mimeType: 'video/webm;codecs=vp8,opus'};
         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-          console.error(`${options.mimeType} is not supported`);
+          log(`${options.mimeType} is not supported`);
           options = {mimeType: 'video/webm'};
           if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            console.error(`${options.mimeType} is not supported`);
+            log(`${options.mimeType} is not supported`);
             options = {mimeType: 'video/quicktime'};
           }
         }
       }
       try {
+        log('MediaRecorder:', MediaRecorder, options);
         mediaRecorder = new MediaRecorder(window.stream, options);
       } catch (e) {
         console.error('Exception while creating MediaRecorder:', e);
