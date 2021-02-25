@@ -138,7 +138,11 @@
     }
 
     function play(ele, cks) {
-      const superBuffer = new Blob(cks, {type: 'video/webm'});
+      let type = 'video/webm';
+      if (/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase())) {
+        type = 'video/quicktime';
+      }
+      const superBuffer = new Blob(cks, { type: type });
       ele.src = null;
       ele.srcObject = null;
       ele.src = window.URL.createObjectURL(superBuffer);
@@ -179,7 +183,7 @@
           options = {mimeType: 'video/webm'};
           if (!MediaRecorder.isTypeSupported(options.mimeType)) {
             console.error(`${options.mimeType} is not supported`);
-            options = {mimeType: 'video/mp4'};
+            options = {mimeType: 'video/quicktime'};
           }
         }
       }
@@ -203,6 +207,9 @@
 
       const gumVideo = document.querySelector('video#video');
       gumVideo.srcObject = stream;
+      window.setTimeout(function () {
+        gumVideo.play();
+      },5000);
       initRecord();
     }
 
