@@ -70,6 +70,8 @@
             const video = document.createElement('video');
             video.controls = true;
             video.loop = true;
+            video.playsinline = true;
+            video.muted = true;
             evs.forEach(function (ev) {
                 video.addEventListener(ev, function (event) {
                     log('event: ', ev, event);
@@ -77,7 +79,6 @@
             });
             function loaded () {
                 preview.appendChild(video);
-                video.play();
                 const size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
                 const duration = video.duration + ' 秒';
                 const type = file.type;
@@ -88,16 +89,17 @@
                 );
             }
             video.onloadedmetadata = function () {
-                return;
+                // return;
                 loaded();
             };
             video.onerror = function (e) {
                 log('onerror: ', e)
             }
             video.src = src;
+            video.play();
             window.setTimeout(function () {
-                loaded();
-            }, 2000);
+                // loaded();
+            }, 5000);
         });
     };
 </script>
