@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>h5 video</title>
-    <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 </head>
 <body>
     <div id="select-wrap">
@@ -42,14 +41,6 @@
     }
 </style>
 <script>
-    wx.config({
-        debug: false,
-        appId: '111',
-        timestamp: '111',
-        nonceStr: '111',
-        signature: '111',
-        jsApiList: []
-    });
     var preview = document.querySelector('div#preview');
     var select = document.querySelector('input#select');
     var selectWrap = document.querySelector('div#select-wrap');
@@ -82,7 +73,6 @@
             video.playsinline = true;
             video.muted = true;
             video.autoplay = true;
-            video.setAttribute('x5-video-player-type', 'h5');
             evs.forEach(function (ev) {
                 video.addEventListener(ev, function (event) {
                     log('event: ', ev, event);
