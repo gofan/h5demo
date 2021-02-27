@@ -12,6 +12,7 @@
     </div>
     <h3>预览：</h3>
     <div id="preview"></div>
+    <button onclick="playAll()">全部播放</button>
     <h3>Logs: </h3>
     <div id="log"></div>
 </body>
@@ -45,6 +46,12 @@
     var select = document.querySelector('input#select');
     var selectWrap = document.querySelector('div#select-wrap');
     var logDiv = document.querySelector('#log');
+    function playAll() {
+        const videos = document.querySelectorAll('#preview > video');
+        [...videos].forEach(video => {
+            video.play();
+        });
+    }
     function log(...items) {
         logDiv.innerHTML = logDiv.innerHTML + items.map(function (item) {
             if (typeof item === 'object') {
@@ -72,7 +79,6 @@
             video.loop = true;
             video.playsinline = true;
             video.muted = true;
-            video.autoplay = true;
             video.preload = 'auto';
             evs.forEach(function (ev) {
                 video.addEventListener(ev, function (event) {
@@ -97,9 +103,6 @@
             };
             video.src = src;
             preview.appendChild(video);
-            window.setTimeout(function () {
-                video.play();
-            }, 5000);
         });
     };
 </script>
