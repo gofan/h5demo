@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" id="filepicker" accept="video/mp4" onchange="chooseVideoInput()">
+    <div class="video-container">
+        <video id="video" src="" controls webkit-playsinline="webkit-playsinline" playsinline></video>
+    </div>
+</body>
+<script>
+    function chooseVideoInput() {
+        var files = document.getElementById('filepicker').files[0];
+        var video = document.getElementById('video');
+        var url = URL.createObjectURL(files);
+        video.src = url;
+        video.play();
+    }
+</script>
+</html>
