@@ -12,7 +12,7 @@
     </div>
     <h3>预览：</h3>
     <div id="preview"></div>
-    <button onclick="playAll()">全部播放</button>
+    <button id="playAll" onclick="playAll()">全部播放</button>
     <h3>Logs: </h3>
     <div id="log"></div>
 </body>
@@ -42,6 +42,7 @@
     }
 </style>
 <script>
+    var playBtn = document.querySelector('button#playAll');
     var preview = document.querySelector('div#preview');
     var select = document.querySelector('input#select');
     var selectWrap = document.querySelector('div#select-wrap');
@@ -103,6 +104,7 @@
             };
             video.src = src;
             preview.appendChild(video);
+            playBtn.click();
         });
     };
 </script>
