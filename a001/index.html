@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <input type="file" id="filepicker" accept="video/mp4" onchange="chooseVideoInput()">
+    <input type="file" id="filepicker" accept="video/*" capture="camrecorder" onchange="chooseVideoInput()">
     <div class="video-container">
         <video id="video" src="" controls webkit-playsinline="webkit-playsinline" playsinline></video>
     </div>
