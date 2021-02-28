@@ -222,7 +222,8 @@
         }
       };
       try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const fn = navigator.mediaDevices && navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || window.getUserMedia;
+        const stream = await fn(constraints);
         handleSuccess(stream);
       } catch (e) {
         log('navigator.getUserMedia error:', e);
