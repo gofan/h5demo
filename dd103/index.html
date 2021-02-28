@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>h5 video</title>
+</head>
+<body>
+    <button id="start">开始试验</button>
+    <div id="main">
+        <div id="select-wrap">
+            拍摄视频
+            <input id="select" type="file" accept="video/*" capture="camrecorder" />
+        </div>
+        <h3>预览：</h3>
+        <video id="prev-1" width="300px" controls webkit-playsinline="webkit-playsinline" playsinline></video>
+        <video id="prev-2" width="300px" controls webkit-playsinline="webkit-playsinline" playsinline></video>
+        <h3>Logs: </h3>
+        <div id="log"></div>
+    </div>
+</body>
+<style>
+    #main {
+        display: none;
+    }
+    #select-wrap {
+        width: 100px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        padding: 5 10px;
+        background-color:firebrick;
+        color: white;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    #select-wrap:hover {
+        background-color: forestgreen;
+    }
+    #select-wrap input {
+        display: none;
+    }
+</style>
+<script>
+    var preview = document.querySelector('div#preview');
+    var select = document.querySelector('input#select');
+    var selectWrap = document.querySelector('div#select-wrap');
+    var logDiv = document.querySelector('#log');
+    var prev1 = document.querySelector('video#prev-1');
+    var prev2 = document.querySelector('video#prev-2');
+    document.querySelector('button#start').onclick = () => {
+        [prev1, prev2].forEach(ele => ele.play());
+        document.querySelector('div#main').style.display = 'block';
+        document.querySelector('button#start').style.display = 'none';
+    }
+
+    function log(...items) {
+        logDiv.innerHTML = logDiv.innerHTML + items.map(function (item) {
+            if (typeof item === 'object') {
+                return JSON.stringify(item);
+            }
+            return item;
+        }) + '<br />'
+    }
+    logDiv.onclick = function () {
+        logDiv.innerHTML = '';
+    };
+    selectWrap.onclick = function () {
+        select.click();
+    }
+    var evs = 'loadeddata loadedmetadata loadstart progress suspend abort emptied stalled play pause waiting canplay canplaythrough seeking seeked timeupdate ended ratechange druationchange volumechange'.split(' ');
+    evs.forEach(function (ev) {
+        [prev1, prev2].forEach((ele) => {
+            ele.addEventListener(ev, function (event) {
+            log('event: ' + ele.id, ev, event);
+           })
+        });
+    });
+    select.onchange = function (e) {
+        log('file change: ', e);
+        const target = e.target || e.srcElement;
+        const file = target.files[0]; // 只取一个文件
+        const src = window.URL.createObjectURL(file);
+        log('src: ', src);
+        let video;
+        if ([prev1.src, prev2.src].every(it => it.indexOf('blob') !== -1)) {
+            video = prev1;;
+            prev1.src = '';
+            prev2.src = '';
+        } else if (prev1.src.indexOf('blob') === -1) {
+            video = prev1;
+        } else {
+            video = prev2;
+        }
+        function loaded () {
+            const size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+            const duration = video.duration + ' 秒';
+            const type = file.type;
+            const text = '大小：' + size + ' 时长:' + duration + ' 类型：' + type;
+            log('text: ', text);
+            // preview.appendChild(
+            //     document.createTextNode(text)
+            // );
+        }
+        video.onloadedmetadata = function () {
+            loaded();
+        };
+        video.onerror = function (e) {
+            log('onerror: ', e)
+        };
+        video.src = src;
+        preview.appendChild(video);
+    };
+</script>
+</html>
