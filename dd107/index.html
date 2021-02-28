@@ -114,7 +114,9 @@
         };
         video.src = src;
         preview.appendChild(video);
-        video.play();
+        setTimeout(() => {
+            video.play();
+        }, 2000);
     };
 </script>
 </html>
