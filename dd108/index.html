@@ -43,7 +43,6 @@
     }
 </style>
 <script>
-    var preview = document.querySelector('div#preview');
     var select = document.querySelector('input#select');
     var selectWrap = document.querySelector('div#select-wrap');
     var logDiv = document.querySelector('#log');
@@ -102,9 +101,6 @@
             const type = file.type;
             const text = '大小：' + size + ' 时长:' + duration + ' 类型：' + type;
             log('text: ', text);
-            // preview.appendChild(
-            //     document.createTextNode(text)
-            // );
         }
         video.onloadedmetadata = function () {
             loaded();
@@ -113,10 +109,7 @@
             log('onerror: ', e)
         };
         video.src = src;
-        preview.appendChild(video);
-        setTimeout(() => {
-            video.play();
-        }, 2000);
+        video.play();
     };
 </script>
 </html>
