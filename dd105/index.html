@@ -50,7 +50,10 @@
     var prev1 = document.querySelector('video#prev-1');
     var prev2 = document.querySelector('video#prev-2');
     document.querySelector('button#start').onclick = () => {
-        [prev1, prev2].forEach(ele => ele.play());
+        [prev1, prev2].forEach(ele => {
+            ele.play();
+            ele.pause();
+        });
         document.querySelector('div#main').style.display = 'block';
         document.querySelector('button#start').style.display = 'none';
     }
